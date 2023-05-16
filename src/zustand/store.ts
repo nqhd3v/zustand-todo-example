@@ -1,4 +1,4 @@
-import create from 'zustand'
+import { create } from 'zustand'
 import { TodoSlice, createTodoSlice } from './todo/todoSlice'
 
 type StoreState = TodoSlice;
