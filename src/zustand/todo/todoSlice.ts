@@ -1,11 +1,14 @@
 import { StateCreator } from 'zustand';
 
 import { ToDo } from "@/types/todo"
+import { produce } from 'immer';
 
-export type TodoSlice = {
+export type TodoStates = {
   doneIds: ToDo['id'][];
   undoneIds: ToDo['id'][];
   dictionary: Record<ToDo['id'], ToDo>;
+}
+export type TodoSlice = TodoStates & {
   addNewItem: (value: string) => void;
   updateItemById: (id: string, value: string) => void;
   markDoneItemById: (id: string) => void;
@@ -18,77 +21,54 @@ export const createTodoSlice: StateCreator<TodoSlice> = (set, get) => ({
   undoneIds: [],
   dictionary: {},
   addNewItem: (value: string) => {
-    const { undoneIds, dictionary } = get();
     const newItem: ToDo = {
       id: Date.now().toString(),
       value,
       isDone: false,
       createdAt: new Date,
     };
-    set({
-      undoneIds: [...undoneIds, newItem.id],
-      dictionary: {
-        ...dictionary,
-        [newItem.id]: newItem,
-      }
-    });
+
+    set(produce((state: TodoStates) => {
+      state.undoneIds.push(newItem.id);
+      state.dictionary[newItem.id] = newItem;
+    }));
   },
   updateItemById: (id: string, value: string) => {
-    const dictionary = get().dictionary;
-    set({
-      dictionary: {
-        ...dictionary,
-        [id]: {
-          ...dictionary[id],
-          value,
-        }
-      }
-    })
+    set(produce((state: TodoStates) => {
+      state.dictionary[id].value = value;
+    }));
   },
   markDoneItemById: (id: string) => {
-    const { dictionary, doneIds, undoneIds } = get();
-    const newDoneIds = [...Array.from(new Set([...doneIds, id]))];
+    const { doneIds, undoneIds } = get();
+    const newDoneIds = [...Array.from(new Set([...doneIds, id]))].sort();
     const newUndoneIds = undoneIds.filter(listId => listId !== id);
 
-    set({
-      undoneIds: newUndoneIds,
-      doneIds: newDoneIds,
-      dictionary: {
-        ...dictionary,
-        [id]: {
-          ...dictionary[id],
-          isDone: true,
-        }
-      }
-    })
+    set(produce((state: TodoStates) => {
+      state.undoneIds = newUndoneIds;
+      state.doneIds = newDoneIds;
+      state.dictionary[id].isDone = true;
+    }));
   },
   markUndoneItemById: (id: string) => {
-    const { dictionary, doneIds, undoneIds } = get();
+    const { doneIds, undoneIds } = get();
     const newDoneIds = doneIds.filter(listId => listId !== id);
-    const newUndoneIds = [...Array.from(new Set([...undoneIds, id]))];
+    const newUndoneIds = [...Array.from(new Set([...undoneIds, id]))].sort();
 
-    set({
-      doneIds: newDoneIds,
-      undoneIds: newUndoneIds,
-      dictionary: {
-        ...dictionary,
-        [id]: {
-          ...dictionary[id],
-          isDone: false,
-        }
-      }
-    })
+    set(produce((state: TodoStates) => {
+      state.doneIds = newDoneIds;
+      state.undoneIds = newUndoneIds;
+      state.dictionary[id].isDone = false;
+    }));
   },
   removeItemById: (id: string) => {
-    const { dictionary, undoneIds, doneIds } = get();
+    const { undoneIds, doneIds } = get();
     const newDoneIds = doneIds.filter(listId => listId !== id);
     const newUndoneIds = undoneIds.filter(listId => listId !== id);
-    const newDic = { ...dictionary }
-    delete newDic[id];
-    set({
-      doneIds: newDoneIds,
-      undoneIds: newUndoneIds,
-      dictionary: newDic,
-    });
+
+    set(produce((state: TodoStates) => {
+      state.doneIds = newDoneIds;
+      state.undoneIds = newUndoneIds;
+      delete state.dictionary[id];
+    }));
   }
 })

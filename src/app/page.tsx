@@ -9,6 +9,7 @@ export default function Home() {
     doneIds: state.doneIds,
     undoneIds: state.undoneIds,
   }));
+  console.log(undoneIds);
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-neutral-900">
@@ -17,11 +18,11 @@ export default function Home() {
           <AddNewTodo />
           
           <div className={undoneIds.length > 0 ? "mt-5" : ""}>
-            {undoneIds.sort().map(id => <TodoItem id={id} key={`todo-${id}`} className='mb-2 last:mb-0' />)}
+            {undoneIds.map(id => <TodoItem id={id} key={`todo-${id}`} className='mb-2 last:mb-0' />)}
           </div>
 
           <div className={doneIds.length > 0 ? "mt-5" : ""}>
-            {doneIds.sort().map(id => <TodoItem id={id} key={`todo-${id}`} className='mb-2 last:mb-0' />)}
+            {doneIds.map(id => <TodoItem id={id} key={`todo-${id}`} className='mb-2 last:mb-0' />)}
           </div>
         </div>
         <div
