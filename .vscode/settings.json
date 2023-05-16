@@ -1,0 +1,9 @@
+{
+  "cSpell.words": [
+    "zustand"
+  ],
+  "editor.formatOnSave": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
+}
