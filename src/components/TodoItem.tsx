@@ -29,7 +29,7 @@ const TodoItem: React.FC<{
         className
       }
     >
-      <div className={`w-[calc(100%-96px)] ${data.isDone ? 'line-through' : ''}`}>
+      <div className={`w-[calc(100%-96px)] text-white ${data.isDone ? 'line-through' : ''}`}>
         {data.value}
       </div>
       {data.isDone ? (

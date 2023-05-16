@@ -10,7 +10,7 @@ export default function Home() {
   }));
 
   return (
-    <main className="flex min-h-screen items-center justify-center">
+    <main className="flex min-h-screen items-center justify-center bg-neutral-900">
       <div className="w-[500px] rounded-md shadow-md backdrop-blur-sm p-5 border border-white bg-white/10">
         <AddNewTodo />
         
