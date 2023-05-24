@@ -2,14 +2,14 @@
 import AddNewTodo from '@/components/AddNew';
 import TodoItem from '@/components/TodoItem';
 import GithubIcon from '@/components/svgs/Github';
-import { useAppStore } from '@/zustand/store';
+import { useAppStore, useStore } from '@/zustand/store';
 
 export default function Home() {
-  const { undoneIds, doneIds } = useAppStore(state => ({
+  const states = useStore(useAppStore, state => ({
     doneIds: state.doneIds,
     undoneIds: state.undoneIds,
   }));
-  console.log(undoneIds);
+  const { undoneIds, doneIds } = states || { doneIds: [], undoneIds: [] };
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-neutral-900">
