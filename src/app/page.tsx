@@ -19,11 +19,11 @@ export default function Home() {
     <main
       className={
         "flex min-h-screen items-center justify-center " +
-        `theme-${currentTheme}`
+        `theme-${currentTheme || 'neutral'}`
       }
     >
       <div className="flex flex-col items-center">
-        <div className="w-[500px] rounded-md shadow-md backdrop-blur-sm p-5 border border-white bg-white/10 mb-5">
+        <div className="w-[calc(100vw-20px)] sm:w-[500px] rounded-md shadow-md backdrop-blur-sm p-5 border border-white bg-white/10 mb-5">
           <AddNewTodo />
           
           <div className={undoneIds.length > 0 ? "mt-5" : ""}>
