@@ -42,18 +42,21 @@ export default function Home() {
           nqhd3v/zustand-todo-example
         </div>
       </div>
-      <div className="fixed flex bottom-5 right-5 p-2 rounded-md border border-white backdrop-blue-sm bg-white/10">
-        {THEMES.map(t => (
-          <div
-            className={
-              "cursor-pointer w-8 h-8 mr-2 last:mr-0 rounded-sm border border-1 border-gray-400 " +
-              `theme-${t} ` + 
-              (t === currentTheme ? 'theme-selected ' : '')
-            }
-            onClick={() => t === currentTheme ? null : setTheme(t)}
-            key={`theme-options-${t}`}
-          />
-        ))}
+      <div className="fixed w-full flex justify-between items-center right-0 left-0 bottom-2 px-2">
+        <div className="text-sm text-gray-400">Powered by <a href="https://nqhuy.dev" target="_blank" className='font-bold underline'>nqhuy</a></div>
+        <div className="flex p-2 rounded-md backdrop-blue-sm bg-white/10">
+          {THEMES.map(t => (
+            <div
+              className={
+                "cursor-pointer w-8 h-8 mr-2 last:mr-0 rounded-sm border border-1 border-gray-400 " +
+                `theme-${t} ` + 
+                (t === currentTheme ? 'theme-selected ' : '')
+              }
+              onClick={() => t === currentTheme ? null : setTheme(t)}
+              key={`theme-options-${t}`}
+            />
+          ))}
+        </div>
       </div>
     </main>
   )
