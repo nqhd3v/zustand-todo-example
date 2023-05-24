@@ -2,17 +2,26 @@
 import AddNewTodo from '@/components/AddNew';
 import TodoItem from '@/components/TodoItem';
 import GithubIcon from '@/components/svgs/Github';
-import { useAppStore, useStore } from '@/zustand/store';
+import { THEMES } from '@/types/theme';
+import { useStore } from '@/zustand/store';
+import { setTheme, useThemeStore } from '@/zustand/themeSlice';
+import { useTodoStore } from '@/zustand/todoSlice';
 
 export default function Home() {
-  const states = useStore(useAppStore, state => ({
+  const currentTheme = useStore(useThemeStore, state => state.currentTheme);
+  const todoStates = useStore(useTodoStore, state => ({
     doneIds: state.doneIds,
     undoneIds: state.undoneIds,
   }));
-  const { undoneIds, doneIds } = states || { doneIds: [], undoneIds: [] };
+  const { undoneIds, doneIds } = todoStates || { doneIds: [], undoneIds: [] };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-neutral-900">
+    <main
+      className={
+        "flex min-h-screen items-center justify-center " +
+        `theme-${currentTheme}`
+      }
+    >
       <div className="flex flex-col items-center">
         <div className="w-[500px] rounded-md shadow-md backdrop-blur-sm p-5 border border-white bg-white/10 mb-5">
           <AddNewTodo />
@@ -32,6 +41,19 @@ export default function Home() {
           <GithubIcon size={16} className='fill-white mr-1' />
           nqhd3v/zustand-todo-example
         </div>
+      </div>
+      <div className="fixed flex bottom-5 right-5 p-2 rounded-md border border-white backdrop-blue-sm bg-white/10">
+        {THEMES.map(t => (
+          <div
+            className={
+              "cursor-pointer w-8 h-8 mr-2 last:mr-0 rounded-sm border border-1 border-gray-400 " +
+              `theme-${t} ` + 
+              (t === currentTheme ? 'theme-selected ' : '')
+            }
+            onClick={() => t === currentTheme ? null : setTheme(t)}
+            key={`theme-options-${t}`}
+          />
+        ))}
       </div>
     </main>
   )

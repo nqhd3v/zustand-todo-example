@@ -1,5 +1,6 @@
-import { useAppStore } from "@/zustand/store"
+import { useTodoStore } from "@/zustand/todoSlice";
 import React from "react"
+import { useStore } from "zustand";
 
 const TodoItem: React.FC<{
   id: string;
@@ -10,7 +11,7 @@ const TodoItem: React.FC<{
     onMarkDone,
     onMarkUnDone,
     onRemove,
-  } = useAppStore(state => ({
+  } = useStore(useTodoStore, state => ({
     data: state.dictionary[id],
     onMarkDone: () => state.markDoneItemById(id),
     onMarkUnDone: () => state.markUndoneItemById(id),

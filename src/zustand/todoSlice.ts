@@ -1,7 +1,9 @@
-import { StateCreator } from 'zustand';
+import { StateCreator, create } from 'zustand';
 
 import { ToDo } from "@/types/todo"
 import { produce } from 'immer';
+import { immer } from 'zustand/middleware/immer';
+import { devtools, persist } from 'zustand/middleware';
 
 export type TodoStates = {
   doneIds: ToDo['id'][];
@@ -72,3 +74,15 @@ export const createTodoSlice: StateCreator<TodoSlice> = (set, get) => ({
     }));
   }
 })
+
+export const useTodoStore = create<TodoSlice>()(
+  immer(devtools(persist(
+    (...a) => ({
+      ...createTodoSlice(...a),
+    }),
+    {
+      name: 'todo-store',
+      // storage: createJSONStorage(() => localStorage), 
+    }
+  )))
+);
